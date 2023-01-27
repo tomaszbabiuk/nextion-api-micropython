@@ -1,5 +1,5 @@
 # A Nextion driver for Micropython. 
-It allows us to communicate with Nextion displays and update the TFT content. Tested on ESP32 and Sonoff NSPanel. Some parameters are hardcoded (like TFT update baud rate) but easy to change. Feel free to create a PR and formalize this API.
+It allows to communicate with Nextion displays and update the TFT content. Tested on ESP32 and Sonoff NSPanel. Some parameters are hardcoded (like TFT update baud rate) but easy to change. Feel free to create a PR and formalize this API. To see this API in action see: https://github.com/tomaszbabiuk/aeplugin-nspanel-firmware
 
 # Prerequisites
 1. Flash Micropython firmware on your board (https://micropython.org/download/)
@@ -33,7 +33,7 @@ writer = NextionWriter(uart)
 writer.write("page page2") #changes current page to page2
 ```
 
-There's no need to send an FF FF FF at the end of each command. If you want to send data in chunks use insertDelimeter=False parameter:
+There's no need to send FF FF FF at the end of each command. If you want to send data in chunks use insertDelimeter=False parameter:
 ```python
 from nextion import *
 
@@ -53,7 +53,7 @@ uart.init(115200, bits=8, parity=None, stop=1, tx=16, rx=17)
 writer = NextionWriter(uart)
 
 class SampleAction(NextionAction):
-    # execute this action every time when MCU receives 01 02 FF FF FF
+    # execute this action every time when MCU receives 01 02 FF FF FF, note that the data is stripped from FF FF FF
     def checkMatch(self, data: bytearray):
         return len(data) == 2 and data[0] == 0x01 and data[1] == 0x02 
 
@@ -72,7 +72,7 @@ while True:
 
 
 ### Example 3 - flashing/updating the screen with TFT file
-The TFT file must be stored on a Micropython file system space. You can use Adafruit's ampy for that:
+The TFT file must be stored in the Micropython file system space. You can use Adafruit's ampy for that:
 ```bash
 ampy --port /dev/my_port put src/my_custom.tft
 ```
