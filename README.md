@@ -85,7 +85,7 @@ uart = UART(2, 115200)
 uart.init(115200, bits=8, parity=None, stop=1, tx=16, rx=17)
 
 writer = NextionWriter(uart)
-writer.upload("my_custom.tft")
+writer.update("my_custom.tft")
 ```
 
 or you can do this in an action
